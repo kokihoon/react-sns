@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import {Menu, Input, Button} from 'antd/lib';
+import propTypes from 'prop-types';
+import {Menu, Input, Button, Row, Col,Card, Avatar, Form} from 'antd/lib';
+import {useSelector} from 'react-redux';
+import LoginForm from './LoginForm';
+import UserProfile from './UserProfile';
+
 
 const AppLayout = ({children}) => {
-    return (
+    const {isLoggedIn} = useSelector(state => state.user);
+      return (
         <div>
             <Menu mode="horizontal">
                 <Menu.Item key = "home"><Link href="/"><a>노드버드</a></Link></Menu.Item>
@@ -12,11 +18,25 @@ const AppLayout = ({children}) => {
                     <Input.Search enterßButton style={{verticalAlign:'middle'}}/>
                 </Menu.Item>
             </Menu>
-            <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-            
-            {children}
+            <Row gutter={8}>
+                <Col xs={24} md={6}>
+                    {isLoggedIn 
+                    ? <UserProfile/>
+                        :
+                    <LoginForm/>}
+                </Col>
+                <Col xs={24} md={12}>
+                    {children}
+                    </Col>
+                <Col xs={24} md={6}>
+
+                </Col>
+            </Row>
         </div>
     );
 };
 
+AppLayout.propTypes = {
+    children : propTypes.node,
+};
 export default AppLayout;

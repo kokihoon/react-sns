@@ -1,21 +1,25 @@
-import React from 'react';
-import Link from 'next/link';
-import Head from 'next/head';
-import AppLayout from '../components/AppLayout';
+import React, { useEffect } from "react";
+import PostCard from "../components/PostCard";
+import PostForm from "../components/PostForm";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
-    return (
-        <>
-            <Head>
-                <title>NodeBird</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"/>
-            </Head>
-            <AppLayout>
-                <Link href="/about"><a>about</a></Link>
-                <div>Hello, Next!</div>                
-            </AppLayout>
-        </>
-    )
+  const { user, isLoggedIn } = useSelector(state => state.user);
+  const { mainPosts } = useSelector(state => state.post);
+
+  return (
+    <>
+      {user ? (
+        <div>로그인 했습니다.: {user.nickname}</div>
+      ) : (
+        <div>로그아웃했습니다.</div>
+      )}
+      {isLoggedIn && <PostForm />}
+      {mainPosts.map(c => {
+        return <PostCard key={c} post={c} />;
+      })}
+    </>
+  );
 };
 
 export default Home;
